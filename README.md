@@ -2,6 +2,9 @@
 
 A simple RESTful API built with Go and Gin that allows you to manage blog posts. It supports creating new posts and retrieving all posts.
 
+
+#### <b> Working on adding Authentication, TLS, Users, etc., can all be added. </b>
+
 ## Features
 
 - **GET /blogs/**: Retrieve all blog posts.
