@@ -35,7 +35,7 @@ A simple RESTful API built with Go and Gin that allows you to manage blog posts.
   ├── migrations/       # Database migrations (optional)
   └── api/              # API-specific files (optional)
       └── blog_api.go
-
+```
 Setup Instructions
 Prerequisites
 
@@ -115,6 +115,7 @@ curl -X POST http://localhost:8080/blogs/ \
   -H "Content-Type: application/json" \
   -d '{"title": "New Blog Post", "author": "Jane Doe", "content": "This is a new post."}'
 
+```plaintext
 License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
@@ -124,5 +125,5 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - Replace `yourusername` in the GitHub clone URL.
 - Add any specific setup or configuration details.
 - Mention any additional dependencies or setup requirements if needed.
-
-Let me know if you'd like further changes or additions!
+```'''
+### Thanks to gin-gonic and any developers whose dependencies I'm using : )
