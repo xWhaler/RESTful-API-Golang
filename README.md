@@ -1,4 +1,5 @@
-# Go-Rest Blog API
+# Go-Rest Blog API 
+#### <em>Work in progress </em>
 
 A simple RESTful API built with Go and Gin that allows you to manage blog posts. It supports creating new posts and retrieving all posts.
 
