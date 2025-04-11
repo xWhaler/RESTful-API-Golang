@@ -24,11 +24,14 @@ func main() {
 
 	router := gin.Default()
 
-	router.GET("/", blogHandler.GetPosts)
+	router.GET("/posts", blogHandler.GetPosts)
 
 	router.POST("/", blogHandler.CreatePost)
+	
+
+	router.GET("/ping", func(c *gin.Context) {
+		c.JSON(200, gin.H{"message": "ponging back from the ping"})
+		})
 
 	router.Run(":8080")
 }
-
-
