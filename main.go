@@ -1,37 +1,48 @@
-package main 
+package main
 
 import (
-    "database/sql"
-    "log"
+	"database/sql"
 	"go-rest/handlers"
-    
-    "github.com/gin-gonic/gin"
-    _ "github.com/go-sql-driver/mysql"
+	"go-rest/models"
+	"log"
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+	_ "github.com/go-sql-driver/mysql"
 )
-
-
-// This is a simple REST API for a blog application using Go and Gin framework.
 
 func main() {
 
-	blogdb, err := sql.Open("mysql", "camelbyte:Sophia@tcp(127.0.0.1:3306)/goblog")
+	db, err := sql.Open("mysql", "camelbyte:Sophia@tcp(127.0.0.1:3306)/goblog")
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer blogdb.Close()
+	defer db.Close()
 
-	blogHandler := &handlers.BlogHandler{DB: blogdb}
+	blogHandler := &handlers.BlogHandler{DB: db}
 
 	router := gin.Default()
 
 	router.GET("/posts", blogHandler.GetPosts)
 
-	router.POST("/", blogHandler.CreatePost)
-	
+	router.POST("/templates/create", func(c *gin.Context) {
+		var newPost models.BlogPost
 
-	router.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{"message": "ponging back from the ping"})
-		})
+		if err := c.Bind(&newPost); err != nil {
+			c.String(http.StatusBadRequest, "Bad Request: %v", err)
+			return
+		}
 
-	router.Run(":8080")
+		err = models.CreatePost(db, newPost) // Pass newPost to CreatePost
+		if err != nil {
+			c.String(http.StatusInternalServerError, "Error creating the blog post: %v", err)
+			return
+		}
+
+		c.String(http.StatusOK, "Blog post created successfully")
+	})
+
+	router.LoadHTMLGlob("templates/*")
+
+	router.Run(":8080") // Ensure this is outside all handlers
 }

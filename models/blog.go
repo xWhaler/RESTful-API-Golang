@@ -1,20 +1,20 @@
-package models 
+package models
 
 import (
 	"database/sql"
 	"log"
 )
 
-
-type BlogPost struct{
-	ID      int    `json:"id"`
-	Title   string `json:"title"`
-	Author string `json:"author"`
+type BlogPost struct {
+	ID        int    `json:"id"`
+	Title     string `json:"title"`
+	Author    string `json:"author"`
 	Subtitle  string `json:"subtitle"`
-	Content string `json:"content"`
-	
+	Content   string `json:"content"`
+	CreatedOn string `json:"created_on"`
+	Tags      string `json:"tags"`
+	Subject   string `json:"subject"`
 }
-
 
 func GetPosts(db *sql.DB) ([]BlogPost, error) {
 	var posts []BlogPost
@@ -42,9 +42,8 @@ func GetPosts(db *sql.DB) ([]BlogPost, error) {
 	return posts, nil
 }
 
-
 func CreatePost(db *sql.DB, b BlogPost) error {
-	_, err := db.Exec("INSERT INTO blog (title, author, subtitle, content) VALUES (?, ?, ?, ?)", b.Title, 
+	_, err := db.Exec("INSERT INTO blog (title, author, subtitle, content) VALUES (?, ?, ?, ?)", b.Title,
 		b.Author, b.Subtitle, b.Content)
 
 	return err
