@@ -10,12 +10,17 @@
     <body>
         <main>
             <h1>
-                Hello! Welcome to my Go RESTful API
+                {{ .Title }}
             </h1>
-
-            <p> 
-                Hello again
-            </p>
+            <div>
+                {{ range .Posts }}
+                    <div class="post">
+                        <h2>{{ .Title }}</h2>
+                        <p>{{ .Content }}</p>
+                        <p><a href="/posts/{{ .ID }}">Read more</a></p>
+                    </div>
+                {{ end }}
+            </div>
         </main>
     </body>
 </html>

@@ -1,7 +1,7 @@
 import mysql.connector
 
 # Read markdown content from file
-with open("tutorial.md", "r") as file:
+with open("posts/001-python-regex.md", "r") as file:
     markdown_content = file.read()
 
 # Connect to your database

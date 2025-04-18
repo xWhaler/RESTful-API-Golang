@@ -3,7 +3,6 @@ package handlers
 import (
 	"database/sql"
 	"net/http"
-	"go-rest/models"
 
 	"github.com/gin-gonic/gin"
 )
@@ -12,28 +11,53 @@ type BlogHandler struct {
 	DB *sql.DB
 }
 
-func (h *BlogHandler) GetPosts(c *gin.Context) {
-
-	b, err := models.GetPosts(h.DB)
-	if err == sql.ErrNoRows {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Blog not found"})
-		return
-	} else if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-	c.JSON(http.StatusOK, b)
+type BlogPost struct {
+	ID        int
+	Title     string
+	Author    string
+	Content   string
+	CreatedOn string
+	Tags      string
+	Subject   string
 }
 
-func (h *BlogHandler) CreatePost(c *gin.Context) {
-	var b models.BlogPost
-	if err := c.ShouldBindJSON(&b); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+func (h *BlogHandler) GetPosts(c *gin.Context) {
+	rows, err := h.DB.Query("SELECT id, title, author, content, created_on, tags, subject FROM BlogPosts ORDER BY created_on DESC")
+	if err != nil {
+		c.String(http.StatusInternalServerError, "Error loading posts")
 		return
 	}
-	if err := models.CreatePost(h.DB, b); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	defer rows.Close()
+
+	var posts []BlogPost
+	for rows.Next() {
+		var post BlogPost
+		err := rows.Scan(&post.ID, &post.Title, &post.Author, &post.Content, &post.CreatedOn, &post.Tags, &post.Subject)
+		if err != nil {
+			c.String(http.StatusInternalServerError, "Error parsing row")
+			return
+		}
+		posts = append(posts, post)
+	}
+
+	c.HTML(http.StatusOK, "index.html", gin.H{
+		"Title": "Blog Posts",
+		"Posts": posts,
+	})
+}
+
+func (h *BlogHandler) GetPostByID(c *gin.Context) {
+	id := c.Param("id")
+
+	var post BlogPost
+	err := h.DB.QueryRow("SELECT id, title, author, content, created_on, tags, subject FROM BlogPosts WHERE id = ?", id).
+		Scan(&post.ID, &post.Title, &post.Author, &post.Content, &post.CreatedOn, &post.Tags, &post.Subject)
+	if err != nil {
+		c.String(http.StatusNotFound, "Post not found")
 		return
 	}
-	c.JSON(http.StatusCreated, b)
+
+	c.HTML(http.StatusOK, "post.html", gin.H{
+		"Post": post,
+	})
 }

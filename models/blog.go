@@ -27,7 +27,7 @@ func GetPosts(db *sql.DB) ([]BlogPost, error) {
 
 	for rows.Next() {
 		var post BlogPost
-		if err := rows.Scan(&post.ID, &post.Title, &post.Author, &post.Content); err != nil {
+		if err := rows.Scan(&post.ID, &post.Title, &post.Author, &post.Content, &post.CreatedOn, &post.Tags, &post.Subject); err != nil {
 			log.Println("Error scanning row:", err)
 			return nil, err
 		}
