@@ -122,9 +122,3 @@ License
 This project is licensed under the MIT License - see the LICENSE file for details.
 
 
-### Things to customize:
-- Replace `yourusername` in the GitHub clone URL.
-- Add any specific setup or configuration details.
-- Mention any additional dependencies or setup requirements if needed.
-```'''
-### Thanks to gin-gonic and any developers whose dependencies I'm using : )
