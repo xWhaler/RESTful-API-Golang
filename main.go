@@ -10,7 +10,7 @@ import (
 
 func main() {
 	// Initialize database connection
-	db, err := sql.Open("mysql", "camelbyte:Sophia@tcp(127.0.0.1:3306)/goblog")
+	db, err := sql.Open("mysql", "[root]:[password]@tcp(127.0.0.1:3306)/[db_name]")
 	if err != nil {
 		log.Fatal(err)
 	}
